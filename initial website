@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faisal & Shaniz's Love Journey</title>
+    <style>
+        /* Previous CSS remains the same */
+        .counter-details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .time-unit {
+            text-align: center;
+        }
+
+        .time-number {
+            font-size: 1.8rem;
+            font-weight: 300;
+            background: linear-gradient(to right, #fff, #ffe8e8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Faisal & Shaniz's Love Journey</h1>
+        </div>
+
+        <div class="counter-card" data-start-date="2023-06-12">
+            <h2>❤️ Relationship Time</h2>
+            <div class="counter-number" id="relationship-days">0</div>
+            <div class="counter-details" id="relationship-time"></div>
+            <p>"Every moment with you is precious"</p>
+        </div>
+
+        <div class="counter-card" data-start-date="2024-11-09">
+            <h2>💍 Marriage Countdown</h2>
+            <div class="counter-number" id="marriage-days">0</div>
+            <div class="counter-details" id="marriage-time"></div>
+            <p>"Our forever adventure begins in..."</p>
+        </div>
+    </div>
+
+    <script>
+        // Updated time calculation
+        function calculateTime(startDate) {
+            const start = new Date(startDate);
+            const now = new Date();
+            const diff = now - start;
+
+            const isFuture = diff < 0;
+            const absoluteDiff = Math.abs(diff);
+
+            const days = Math.floor(absoluteDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((absoluteDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((absoluteDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((absoluteDiff % (1000 * 60)) / 1000);
+
+            return {
+                isFuture,
+                days,
+                hours,
+                minutes,
+                seconds
+            };
+        }
+
+        // New time display generator
+        function createTimeElements(container, time) {
+            container.innerHTML = `
+                <div class="time-unit">
+                    <div class="time-number">${time.days}</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number">${time.hours}</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number">${time.minutes}</div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-number">${time.seconds}</div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            `;
+        }
+
+        // Updated counter update function
+        function updateCounters() {
+            document.querySelectorAll('[data-start-date]').forEach(card => {
+                const timeData = calculateTime(card.dataset.startDate);
+                const daysDisplay = card.querySelector('.counter-number');
+                const timeDisplay = card.querySelector('.counter-details');
+
+                if(daysDisplay) {
+                    daysDisplay.textContent = `${timeData.isFuture ? 'In' : ''} ${timeData.days} ${timeData.days === 1 ? 'Day' : 'Days'}`;
+                }
+                
+                if(timeDisplay) {
+                    createTimeElements(timeDisplay, timeData);
+                }
+            });
+        }
+
+        // Keep previous initialization code
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+            createHearts();
+            updateCounters();
+            setInterval(updateCounters, 1000);
+            window.addEventListener('resize', createHearts);
+        });
+
+        // Rest of your existing JavaScript remains the same
+    </script>
+</body>
+</html>
